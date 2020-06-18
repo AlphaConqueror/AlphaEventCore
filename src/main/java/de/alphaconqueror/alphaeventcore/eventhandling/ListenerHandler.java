@@ -34,9 +34,6 @@ public class ListenerHandler {
                             method.setAccessible(true);
                             method.invoke(listener, new Object[]{event});
 
-                            System.out.println("EVENT: Got event " + event.getEventName());
-                            System.out.println("EVENT: Is cancellable?: " + Cancellable.class.isAssignableFrom(event.getClass()));
-
                             if (Cancellable.class.isAssignableFrom(event.getClass()))
                                 isExecutable = !((Cancellable) event).isCancelled();
                         }
