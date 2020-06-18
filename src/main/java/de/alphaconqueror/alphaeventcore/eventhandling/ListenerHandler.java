@@ -19,25 +19,34 @@ public class ListenerHandler {
      *
      * @param event The event to be called.
      */
-    public void callEvent(Event event) {
+    public boolean callEvent(Event event) {
+        boolean isExecutable = true;
+
         for(Listener listener : listeners)
-            for(Method method : listener.getClass().getMethods())
-                if(method.isAnnotationPresent(EventHandler.class)) {
-                    try {
-                        Class<?>[] parameterTypes = method.getParameterTypes();
+            for(Method method : listener.getClass().getMethods()) {
+                try {
+                    Class<?>[] parameterTypes = method.getParameterTypes();
 
-                        if(parameterTypes.length == 1) {
-                            Class<?> parameter = parameterTypes[0];
+                    if (parameterTypes.length == 1) {
+                        Class<?> parameter = parameterTypes[0];
 
-                            if(parameter.getCanonicalName().equalsIgnoreCase(event.getClass().getCanonicalName())) {
-                                method.setAccessible(true);
-                                method.invoke(listener, new Object[] {event});
-                            }
+                        if (parameter.getCanonicalName().equalsIgnoreCase(event.getClass().getCanonicalName())) {
+                            method.setAccessible(true);
+                            method.invoke(listener, new Object[]{event});
+
+                            System.out.println("EVENT: Got event " + event.getEventName());
+                            System.out.println("EVENT: Is cancellable?: " + Cancellable.class.isAssignableFrom(event.getClass()));
+
+                            if (Cancellable.class.isAssignableFrom(event.getClass()))
+                                isExecutable = !((Cancellable) event).isCancelled();
                         }
-                    } catch(Exception e) {
-                        e.printStackTrace();
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+            }
+
+        return isExecutable;
     }
 
     /**
@@ -51,6 +60,7 @@ public class ListenerHandler {
 
     /**
      * Used to add a listener class.
+     *     Note: Listener has to be added to be considered by the handler.
      *
      * @param listener The listener class.
      */
