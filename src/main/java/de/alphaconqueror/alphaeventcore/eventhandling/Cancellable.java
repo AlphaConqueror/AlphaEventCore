@@ -6,6 +6,9 @@
 
 package de.alphaconqueror.alphaeventcore.eventhandling;
 
+/**
+ * Implement this to be able to cancel events when called.
+ */
 public interface Cancellable {
 
     /**
@@ -13,12 +16,12 @@ public interface Cancellable {
      *
      * @return True, if the event has been cancelled, false, if otherwise.
      */
-    public boolean isCancelled();
+    boolean isCancelled();
 
     /**
      * Sets the current state of the event.
      *
      * @param cancel True, if you want to cancel the event.
      */
-    public void setCancelled(boolean cancel);
+    void setCancelled(boolean cancel);
 }

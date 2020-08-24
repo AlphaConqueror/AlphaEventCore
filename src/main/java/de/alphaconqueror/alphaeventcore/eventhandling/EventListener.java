@@ -6,4 +6,7 @@
 
 package de.alphaconqueror.alphaeventcore.eventhandling;
 
-public interface Listener {}
+/**
+ * Implement this to handle events in a class.
+ */
+public interface EventListener {}

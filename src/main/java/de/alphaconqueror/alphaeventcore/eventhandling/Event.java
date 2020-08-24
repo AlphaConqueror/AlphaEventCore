@@ -10,7 +10,7 @@ public abstract class Event {
     private String name;
 
     /**
-     * Used to get the name of the event class.
+     * Gets the name of the event class.
      *
      * @return The name of the event class.
      */
